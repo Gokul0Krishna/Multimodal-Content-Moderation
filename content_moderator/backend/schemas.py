@@ -3,12 +3,14 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, select
 from datetime import datetime
 from typing import Optional
 
+from database import Base
+
 class Ingest_input(BaseModel):
     text: str
     img : HttpUrl
     
-    
-class Api_model(BaseModel):
+
+class Api_model(Base):
     """
     SQLAchemy model for storing API keys.
     """
