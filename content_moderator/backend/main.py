@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+import hashlib
+
+
 from schemas import Ingest_input
 
 app = FastAPI(title='Content Moderator')
