@@ -2,3 +2,5 @@
 .env
 content_moderator/backend/__pycache__
 content_moderator/z
+content_moderator/frontend/node_modules/
+content_moderator/frontend/dist/

@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 
 from schemas import *
 from database import engine, async_session,get_db
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+import os
 
 load_dotenv()
 
@@ -28,7 +31,21 @@ def _key_provider(key: str) -> str:
     return hashlib.sha256(key.encode()).hexdigest()
 
 app = FastAPI(title='Content Moderator')
+
+# Serve static assets from the frontend build
+assets_path = os.path.join(os.path.dirname(__file__), "../frontend/dist/assets")
+if os.path.exists(assets_path):
+    app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
+
+
+@app.get('/')
+def home():
+    index_path = os.path.join(os.path.dirname(__file__), "../frontend/dist/index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"error": "Frontend build not found"}
+
 
 @app.post("/developer/keys", response_model=KeyResponse)
 async def create_new_api_key(payload: KeyCreate, db: AsyncSession = Depends(get_db)):
